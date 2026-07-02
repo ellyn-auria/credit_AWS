@@ -8,9 +8,8 @@ import streamlit as st
 st.set_page_config(page_title="Credit Score Predictor", layout="wide")
 st.title("Credit Score Prediction App")
 
-# Diisi oleh environment variable yang di-set user-data.sh / systemd service
 ENDPOINT_NAME = os.environ.get("ENDPOINT_NAME", "credit-score-endpoint")
-REGION        = os.environ.get("AWS_REGION",    "us-east-1")
+REGION = os.environ.get("AWS_REGION", "us-east-1")
 
 
 @st.cache_resource
@@ -35,36 +34,36 @@ with col1:
     occupation = st.selectbox("Occupation", occupations_list, index=0)
 
     monthly_inhand_salary  = st.number_input("Monthly Inhand Salary ($)", min_value=0.0, value=3000.0)
-    num_bank_accounts      = st.number_input("Num of Bank Accounts",      min_value=0, max_value=20, value=3)
-    num_credit_card        = st.number_input("Num of Credit Card",        min_value=0, max_value=20, value=3)
-    interest_rate          = st.number_input("Interest Rate (%)",         min_value=1, max_value=50, value=10)
-    num_of_loan            = st.number_input("Num of Loan",               min_value=0, max_value=20, value=2)
+    num_bank_accounts = st.number_input("Num of Bank Accounts", min_value=0, max_value=20, value=3)
+    num_credit_card = st.number_input("Num of Credit Card", min_value=0, max_value=20, value=3)
+    interest_rate = st.number_input("Interest Rate (%)", min_value=1, max_value=50, value=10)
+    num_of_loan = st.number_input("Num of Loan", min_value=0, max_value=20, value=2)
 
 with col2:
-    delay_from_due_date    = st.number_input("Delay from due date (Days)",  min_value=0, max_value=100, value=10)
-    num_of_delayed_payment = st.number_input("Num of Delayed Payment",      min_value=0, max_value=50,  value=5)
-    changed_credit_limit   = st.number_input("Changed Credit Limit",        min_value=0.0,              value=5.0)
-    num_credit_inquiries   = st.number_input("Num of Credit Inquiries",     min_value=0, max_value=30,  value=3)
+    delay_from_due_date = st.number_input("Delay from due date (Days)",  min_value=0, max_value=100, value=10)
+    num_of_delayed_payment = st.number_input("Num of Delayed Payment", min_value=0, max_value=50, value=5)
+    changed_credit_limit = st.number_input("Changed Credit Limit", min_value=0.0, value=5.0)
+    num_credit_inquiries = st.number_input("Num of Credit Inquiries", min_value=0, max_value=30, value=3)
 
     credit_mix_list = ["Bad", "Standard", "Good"]
-    credit_mix      = st.selectbox("Credit Mix", credit_mix_list, index=1)
+    credit_mix = st.selectbox("Credit Mix", credit_mix_list, index=1)
 
     outstanding_debt = st.number_input("Outstanding Debt ($)", min_value=0.0, value=1000.0)
 
 with col3:
     credit_utilization_ratio = st.number_input("Credit Utilization Ratio (%)", min_value=0.0, max_value=100.0, value=30.0)
 
-    payment_min_list      = ["Yes", "No", "NM"]
+    payment_min_list = ["Yes", "No", "NM"]
     payment_of_min_amount = st.selectbox("Payment of Min Amount", payment_min_list, index=0)
 
-    total_emi_per_month     = st.number_input("Total EMI per month ($)",     min_value=0.0, value=50.0)
+    total_emi_per_month = st.number_input("Total EMI per month ($)", min_value=0.0, value=50.0)
     amount_invested_monthly = st.number_input("Amount invested monthly ($)", min_value=0.0, value=50.0)
-    monthly_balance         = st.number_input("Monthly Balance ($)",         min_value=0.0, value=300.0)
-    credit_history_months   = st.number_input("Credit History Age (in Months)", min_value=0, value=120)
+    monthly_balance = st.number_input("Monthly Balance ($)", min_value=0.0, value=300.0)
+    credit_history_months = st.number_input("Credit History Age (in Months)", min_value=0, value=120)
 
 payment_behaviour_list = [
-    "Low_spent_Small_value_payments",  "Low_spent_Medium_value_payments",
-    "Low_spent_Large_value_payments",  "High_spent_Small_value_payments",
+    "Low_spent_Small_value_payments", "Low_spent_Medium_value_payments",
+    "Low_spent_Large_value_payments", "High_spent_Small_value_payments",
     "High_spent_Medium_value_payments", "High_spent_Large_value_payments",
 ]
 payment_behaviour = st.selectbox("Payment Behaviour", payment_behaviour_list, index=0)
@@ -78,10 +77,8 @@ with st.sidebar:
 st.markdown("---")
 
 if st.button("Analyze Credit Score", use_container_width=True):
-
-    # Urutan nilai HARUS identik dengan FEATURE_NAMES di serve/inference.py
     instance = [
-        0,                         # Unnamed: 0 (dummy column, identik dengan app.py lokal)
+        0,
         age,
         occupation,
         monthly_inhand_salary,
@@ -140,7 +137,4 @@ if st.button("Analyze Credit Score", use_container_width=True):
 
         except Exception as e:
             st.error(
-                f"Error memanggil endpoint '{ENDPOINT_NAME}'. "
-                f"Pastikan endpoint sudah aktif dan IAM role EC2 memiliki izin InvokeEndpoint. "
-                f"Detail: {e}"
-            )
+                f"Error {e}")
