@@ -1,0 +1,8 @@
+# Packages yang diinstall di dalam SageMaker INFERENCE container
+# (container base: sklearn 1.2-1 / Python 3.10)
+# scikit-learn di-upgrade ke 1.4.2 agar sesuai dengan versi lokal training.
+# PENTING: versi harus cocok dengan yang digunakan saat menyimpan best_model.pkl.
+
+scikit-learn==1.4.2
+xgboost==2.0.3
+imbalanced-learn==0.12.3
